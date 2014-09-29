@@ -1,4 +1,4 @@
-tiny-require.js
+sync-require.js
 ===============
 
 An extremely lightweight dependency injection framework for javascript in the browser
@@ -31,12 +31,12 @@ define(['greeter'], function(greeter) {
 });
 ```
 
-And populate your index.html file with your definitions in any order! (Except for tiny-require itself. It must be the first...)
+And populate your index.html file with your definitions in any order! (Except for sync-require itself. It must be the first...)
 
 ```
 ...
-<!-- tiny-require.js -->
-<script src="tiny-require.js"></script>
+<!-- sync-require.js -->
+<script src="sync-require.js"></script>
 <!-- list of your modules, in any order -->
 <script src="delayedGreeter.js"></script>
 <script src="greeter.js"></script>
@@ -61,12 +61,12 @@ Well, if you:
    * like very small frameworks
    * are going to use your modules only in browsers (but not in Node.js or Rhino, etc..)
 
-Then you will probably be happy with tiny-require.
+Then you will probably be happy with sync-require.
 
 How does it work?
 -----------------
-TinyRequire injects three functions into window:
-   * ```module```: Defines a name for the next module definition. Tiny-require doesn't use filenames to identify modules, instead it uses explicit module name definitions. This way the files can be simply concatenated, and it will preserve all module names accordingly. This function is separated from the define function to maintain some compatibility with RequireJs's ```define```.
+syncRequire injects three functions into window:
+   * ```module```: Defines a name for the next module definition. sync-require doesn't use filenames to identify modules, instead it uses explicit module name definitions. This way the files can be simply concatenated, and it will preserve all module names accordingly. This function is separated from the define function to maintain some compatibility with RequireJs's ```define```.
       * ```module(name:string)``` - Sets the name of the next definition to ```name```.
    * ```define```: Registers a factory method for a module. It uses the module name previously defined by the ```module``` function. The factory method is guaranteed to run at most once, only when it is needed by a dependency resolution.
       * ```define(factory:function)``` - Defines a module without dependencies. The factory method will be called without arguments.
@@ -79,14 +79,14 @@ TinyRequire injects three functions into window:
 Namespaces
 ----------
 
-By default, tiny-require does not handle namespaces. However an extension is provided.
+By default, sync-require does not handle namespaces. However an extension is provided.
 
 TODO
 
 Automated dependency name extraction
 ------------------------------------
 
-In AngularJS you can define modules without explicitly listing the referenced modules as strings. Instead, it can extract the parameter names from the given function. If you like this functionality, you can take advantage of this in tiny-require as well by using the tiny-require-reflect extension.
-Keep in mind that minification of such a code that uses this technique will cause corruption, unless you are using tools in your build process such as ngMin, that will transform your code to use explicit naming of your references. Such a tool for tiny-require does not exist yet.
+In AngularJS you can define modules without explicitly listing the referenced modules as strings. Instead, it can extract the parameter names from the given function. If you like this functionality, you can take advantage of this in sync-require as well by using the sync-require-reflect extension.
+Keep in mind that minification of such a code that uses this technique will cause corruption, unless you are using tools in your build process such as ngMin, that will transform your code to use explicit naming of your references. Such a tool for sync-require does not exist yet.
 
 TODO
