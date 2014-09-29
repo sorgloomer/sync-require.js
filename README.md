@@ -60,6 +60,7 @@ Well, if you:
       * And you don't want to insert RequireJs's preprocessor into your toolchain
    * like very small frameworks
    * are going to use your modules only in browsers (but not in Node.js or Rhino, etc..)
+
 Then you will probably be happy with tiny-require.
 
 How does it work?
