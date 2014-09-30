@@ -1,4 +1,4 @@
-require("TinyRequire", function(SyncRequire) {
+require("SyncRequire", function(SyncRequire) {
 
     var REGEX_CALL = /\(((?:(?:\/\*[\s\S]*?\*\/)|(?:\/\/.*\n)|[^\/])*?)\)/;
     var REGEX_PARAM_SPLIT = /(?:(?:\/\*[\s\S]*?\*\/)|(?:\/\/.*\n)|[,\s\n])+/;
