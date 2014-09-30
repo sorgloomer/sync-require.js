@@ -14,18 +14,23 @@ require("SyncRequire", function(SyncRequire) {
         return params.filter(nonEmpty);
     }
 
-    SyncRequire.reflect = { annotate: annotate };
+    function SyncRequireReflect(instance) {
 
-    SyncRequire.published.define.reflect = function (fn) {
-        var annotate = SyncRequire.reflect.annotate;
-        var deps = annotate(fn);
-        SyncRequire.published.define(deps, fn);
-    };
+        instance.reflect = {
+            annotate: annotate
+        };
 
-    SyncRequire.published.require.reflect = function (fn) {
-        var annotate = SyncRequire.reflect.annotate;
-        var deps = annotate(fn);
-        var require = SyncRequire.published.require;
-        require(deps, fn);
-    };
+        instance.require.reflect = function(fn) {
+            var deps = instance.reflect.annotate(fn);
+            instance.require(deps, fn);
+        };
+
+        instance.define.reflect = function (fn) {
+            var deps = instance.reflect.annotate(fn);
+            instance.define(deps, fn);
+        };
+    }
+
+    SyncRequire.constructor.plugins.reflect = SyncRequireReflect;
+    SyncRequireReflect(SyncRequire);
 });

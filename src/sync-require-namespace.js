@@ -1,33 +1,37 @@
 
 require("SyncRequire", function(SyncRequire) {
-    SyncRequire.namespace = {
-        current: null,
-        namespaced: namespaced
-    };
 
-    var oldGenerateKey = SyncRequire.core.generateKey;
-    var oldResolve = SyncRequire.core.resolve;
+    function SyncRequireNamespace(instance) {
+        var oldGenerateKey = instance.generateKey;
+        var oldResolve = instance.resolve;
 
-    SyncRequire.core.generateKey = function() {
-        return SyncRequire.namespace.namespaced(oldGenerateKey());
-    };
+        instance.generateKey = function(name) {
+            return namespace.namespaced(oldGenerateKey(name));
+        };
 
-    SyncRequire.core.resolve = function(name) {
-        if (name.indexOf('.') < 0) {
-            var name2 = SyncRequire.namespace.namespaced(name);
-            var temp = oldResolve(name2);
-            if (temp) return temp;
+        instance.resolve = function(name) {
+            if (name.indexOf('.') < 0) {
+                var name2 = namespace.namespaced(name);
+                var temp = oldResolve(name2);
+                if (temp) return temp;
+            }
+            return oldResolve(name);
+        };
+
+        function namespaced(name) {
+            return (namespace.current || "") + "." + name;
         }
-        return oldResolve(name);
-    };
 
-    function namespaced(name) {
-        return (SyncRequire.namespace.current || "") + "." + name;
+        function namespace(name) {
+            namespace.current = name;
+        }
+
+        instance.namespace = namespace;
+        namespace.namespaced = namespaced;
+        namespace.current = null;
     }
 
-    function namespace(name) {
-        SyncRequire.namespace.current = name;
-    }
-
-    SyncRequire.publish("namespace", namespace);
+    SyncRequire.constructor.plugins.namespace = SyncRequireNamespace;
+    SyncRequireNamespace(SyncRequire);
+    SyncRequire.constructor.publish("namespace", SyncRequire.namespace);
 });
