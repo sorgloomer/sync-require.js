@@ -1,23 +1,20 @@
-/**
- * Created by Hege on 2014.09.29..
- */
 
-require("TinyRequire", function(TinyRequire) {
-    TinyRequire.namespace = {
+require("SyncRequire", function(SyncRequire) {
+    SyncRequire.namespace = {
         current: null,
         namespaced: namespaced
     };
 
-    var oldGenerateKey = TinyRequire.core.generateKey;
-    var oldResolve = TinyRequire.core.resolve;
+    var oldGenerateKey = SyncRequire.core.generateKey;
+    var oldResolve = SyncRequire.core.resolve;
 
-    TinyRequire.core.generateKey = function() {
-        return TinyRequire.namespace.namespaced(oldGenerateKey());
+    SyncRequire.core.generateKey = function() {
+        return SyncRequire.namespace.namespaced(oldGenerateKey());
     };
 
-    TinyRequire.core.resolve = function(name) {
+    SyncRequire.core.resolve = function(name) {
         if (name.indexOf('.') < 0) {
-            var name2 = TinyRequire.namespace.namespaced(name);
+            var name2 = SyncRequire.namespace.namespaced(name);
             var temp = oldResolve(name2);
             if (temp) return temp;
         }
@@ -25,12 +22,12 @@ require("TinyRequire", function(TinyRequire) {
     };
 
     function namespaced(name) {
-        return (TinyRequire.namespace.current || "") + "." + name;
+        return (SyncRequire.namespace.current || "") + "." + name;
     }
 
     function namespace(name) {
-        TinyRequire.namespace.current = name;
+        SyncRequire.namespace.current = name;
     }
 
-    TinyRequire.publish("namespace", namespace);
+    SyncRequire.publish("namespace", namespace);
 });

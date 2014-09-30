@@ -1,7 +1,4 @@
-/**
- * Created by Hege on 2014.09.29..
- */
-require("TinyRequire", function(TinyRequire) {
+require("TinyRequire", function(SyncRequire) {
 
     var REGEX_CALL = /\(((?:(?:\/\*[\s\S]*?\*\/)|(?:\/\/.*\n)|[^\/])*?)\)/;
     var REGEX_PARAM_SPLIT = /(?:(?:\/\*[\s\S]*?\*\/)|(?:\/\/.*\n)|[,\s\n])+/;
@@ -17,18 +14,18 @@ require("TinyRequire", function(TinyRequire) {
         return params.filter(nonEmpty);
     }
 
-    TinyRequire.reflect = { annotate: annotate };
+    SyncRequire.reflect = { annotate: annotate };
 
-    TinyRequire.published.define.reflect = function (fn) {
-        var annotate = TinyRequire.reflect.annotate;
+    SyncRequire.published.define.reflect = function (fn) {
+        var annotate = SyncRequire.reflect.annotate;
         var deps = annotate(fn);
-        TinyRequire.published.define(deps, fn);
+        SyncRequire.published.define(deps, fn);
     };
 
-    TinyRequire.published.require.reflect = function (fn) {
-        var annotate = TinyRequire.reflect.annotate;
+    SyncRequire.published.require.reflect = function (fn) {
+        var annotate = SyncRequire.reflect.annotate;
         var deps = annotate(fn);
-        var require = TinyRequire.published.require;
+        var require = SyncRequire.published.require;
         require(deps, fn);
     };
 });
