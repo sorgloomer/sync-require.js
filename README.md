@@ -10,8 +10,7 @@ Arrange your modules in files like this:
 
 ```
 // greeter.js
-module('greeter');
-define(function() {
+define('greeter', function() {
 	return {
 		greet: function() {
 			alert('Welcome!');
@@ -21,8 +20,7 @@ define(function() {
 ```
 ```
 // delayedGreeter.js
-module('delayedGreeter');
-define(['greeter'], function(greeter) {
+define('delayedGreeter', ['greeter'], function(greeter) {
 	return {
 		greet: function() {
 			setTimeout(greeter.greet, 1000);
@@ -66,12 +64,10 @@ Then you will probably be happy with sync-require.
 How does it work?
 -----------------
 syncRequire injects three functions into window:
-   * ```module```: Defines a name for the next module definition. sync-require doesn't use filenames to identify modules, instead it uses explicit module name definitions. This way the files can be simply concatenated, and it will preserve all module names accordingly. This function is separated from the define function to maintain some compatibility with RequireJs's ```define```.
-      * ```module(name:string)``` - Sets the name of the next definition to ```name```.
-   * ```define```: Registers a factory method for a module. It uses the module name previously defined by the ```module``` function. The factory method is guaranteed to run at most once, only when it is needed by a dependency resolution.
-      * ```define(factory:function)``` - Defines a module without dependencies. The factory method will be called without arguments.
-      * ```define(dependency:string, factory:function)``` - Defines a module with a single dependency. The factory method will be called with one parameter.
-      * ```define(dependencies:string[], factory:function)``` - Defines a module with multiple dependencies. The dependencies array can be empty, or singleton. 
+   * ```define```: Registers a factory method for a module with the given name. The factory method is guaranteed to run at most once, only when it is needed by a dependency resolution.
+      * ```define(name:string, factory:function)``` - Defines a module without dependencies. The factory method will be called without arguments.
+      * ```define(name:string, dependency:string, factory:function)``` - Defines a module with a single dependency. The factory method will be called with one parameter.
+      * ```define(name:string, dependencies:string[], factory:function)``` - Defines a module with multiple dependencies. The dependencies array can be empty, or singleton. 
    * ```require```: Use this method to define an entry point of your application. Normally only one call of ```require``` is required. This method immediately causes a dependency resolution. If some of the dependencies does not meet, then an error will be thrown, otherwise the entry function will be called with the resolved dependencies. This method does not use definitions registered after the invocation.
       * ```require(dependency:string, entry:function)``` - Injects a single dependency into ```entry```, and calls it.
       * ```require(dependencies:string[], entry:function)``` - Injects dependencies into ```entry```, and calls it.
